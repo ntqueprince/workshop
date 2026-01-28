@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GarageCRM - Customer Management Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- ==================== AUTH PAGE ==================== -->
+    <div id="authPage" class="auth-container">
+        <!-- Left Side - Branding -->
+        <div class="auth-left">
+            <div class="auth-brand">
+                <div class="auth-brand-icon">🔧</div>
+                <div class="auth-brand-name">GarageCRM</div>
+            </div>
+            <p class="auth-tagline">The complete customer management solution for automotive workshops</p>
+
+            <div class="auth-features">
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">👥</div>
+                    <div class="auth-feature-text">
+                        <h4>Track All Customers</h4>
+                        <p>Manage customer vehicles, service history, and contact details in one place</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">📋</div>
+                    <div class="auth-feature-text">
+                        <h4>Insurance Tracking</h4>
+                        <p>Never miss an insurance renewal with automated expiry alerts</p>
+                    </div>
+                </div>
+                <div class="auth-feature">
+                    <div class="auth-feature-icon">🔮</div>
+                    <div class="auth-feature-text">
+                        <h4>Service Predictions</h4>
+                        <p>Smart predictions for upcoming service dates based on mileage and time</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side - Forms -->
+        <div class="auth-right">
+            <div class="auth-form-container">
+                <!-- Login Form -->
+                <div id="loginForm">
+                    <div class="auth-form-header">
+                        <h1>Welcome back</h1>
+                        <p>Sign in to manage your workshop</p>
+                    </div>
+
+                    <form id="loginFormElement">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <div class="form-input-wrapper">
+                                <span class="form-input-icon">✉</span>
+                                <input type="email" class="form-input" id="loginEmail" placeholder="you@example.com"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <div class="form-input-wrapper">
+                                <span class="form-input-icon">🔒</span>
+                                <input type="password" class="form-input" id="loginPassword" placeholder="••••••••"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <span class="form-link" id="btnGoForgot">Forgot password?</span>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            Sign In →
+                        </button>
+                    </form>
+
+                    <p class="auth-footer">
+                        Don't have an account? <a href="#" id="btnGoSignup">Sign up</a>
+                    </p>
+                </div>
+
+                <!-- Signup Form -->
+                <div id="signupForm" hidden>
+                    <div class="auth-form-header">
+                        <h1>Create account</h1>
+                        <p>Start managing your workshop today</p>
+                    </div>
+
+                    <form id="signupFormElement">
+                        <div class="form-group">
+                            <label class="form-label">Workshop Name</label>
+                            <input type="text" class="form-input form-input-simple" id="signupWorkshop"
+                                placeholder="Vikas Carpoint" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Owner Name</label>
+                            <input type="text" class="form-input form-input-simple" id="signupOwner"
+                                placeholder="Vikas Sharma" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-input form-input-simple" id="signupEmail"
+                                placeholder="you@example.com" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-input form-input-simple" id="signupPassword"
+                                placeholder="Minimum 6 characters" required minlength="6">
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            Create Account →
+                        </button>
+                    </form>
+
+                    <p class="auth-footer">
+                        Already have an account? <a href="#" id="btnBackLogin1">Sign in</a>
+                    </p>
+                </div>
+
+                <!-- Forgot Password Form -->
+                <div id="forgotForm" hidden>
+                    <div class="auth-form-header">
+                        <h1>Reset password</h1>
+                        <p>Enter your email to receive a reset link</p>
+                    </div>
+
+                    <form id="forgotFormElement">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <div class="form-input-wrapper">
+                                <span class="form-input-icon">✉</span>
+                                <input type="email" class="form-input" id="forgotEmail" placeholder="you@example.com"
+                                    required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            Send Reset Link →
+                        </button>
+                    </form>
+
+                    <p class="auth-footer">
+                        Remember your password? <a href="#" id="btnBackLogin2">Sign in</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== DASHBOARD PAGE ==================== -->
+    <div id="dashboardPage" hidden>
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-brand">
+                <div class="header-logo">🔧</div>
+                <div class="header-info">
+                    <h1 id="workshopName">Vikas Carpoint</h1>
+                    <span id="modeIndicator">Connected</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-add" id="btnAddCustomer">
+                    <span>+</span> Add Customer
+                </button>
+                <button class="btn-logout" id="btnLogout">
+                    <span>↪</span> Logout
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="dashboard-container">
+            <!-- Summary Cards -->
+            <div class="summary-cards">
+                <div class="summary-card">
+                    <div class="summary-card-content">
+                        <h3>Total Customers</h3>
+                        <div class="value" id="statTotal">0</div>
+                    </div>
+                    <div class="summary-card-icon blue">👥</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-content">
+                        <h3>Service Due Soon</h3>
+                        <div class="value" id="statServiceDue">0</div>
+                    </div>
+                    <div class="summary-card-icon green">🛠️</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-content">
+                        <h3>Policy Expiring</h3>
+                        <div class="value" id="statPolicyExpiring">0</div>
+                    </div>
+                    <div class="summary-card-icon yellow">📋</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-card-content">
+                        <h3>Overdue</h3>
+                        <div class="value" id="statOverdue">0</div>
+                    </div>
+                    <div class="summary-card-icon red">⚠️</div>
+                </div>
+            </div>
+
+            <!-- Filters Bar -->
+            <div class="filters-bar">
+                <div class="search-box">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput"
+                        placeholder="Search vehicle number or mobile...">
+                </div>
+                <div class="filter-controls">
+                    <div class="filter-dropdown-wrapper">
+                        <button class="btn-filter" id="btnFilters">
+                            <span>🎛️</span> Filters <span class="filter-badge" id="filterBadge" hidden>0</span>
+                        </button>
+                        <div class="filter-dropdown" id="filterDropdown" hidden>
+                            <div class="filter-dropdown-header">
+                                <span>Filter Customers</span>
+                                <button type="button" class="filter-reset" id="btnResetFilters">Reset</button>
+                            </div>
+                            <div class="filter-section">
+                                <label class="filter-label">Insurance Expiry (Days)</label>
+                                <div class="filter-chips">
+                                    <button type="button" class="filter-chip" data-filter="insurance"
+                                        data-value="all">All</button>
+                                    <button type="button" class="filter-chip" data-filter="insurance"
+                                        data-value="0-30">0-30</button>
+                                    <button type="button" class="filter-chip" data-filter="insurance"
+                                        data-value="0-60">0-60</button>
+                                    <button type="button" class="filter-chip" data-filter="insurance"
+                                        data-value="expired">Expired</button>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <label class="filter-label">Service Due (Days)</label>
+                                <div class="filter-chips">
+                                    <button type="button" class="filter-chip" data-filter="service"
+                                        data-value="all">All</button>
+                                    <button type="button" class="filter-chip" data-filter="service"
+                                        data-value="0-30">0-30</button>
+                                    <button type="button" class="filter-chip" data-filter="service"
+                                        data-value="0-60">0-60</button>
+                                    <button type="button" class="filter-chip" data-filter="service"
+                                        data-value="overdue">Overdue</button>
+                                </div>
+                            </div>
+                            <div class="filter-section">
+                                <label class="filter-label">Status</label>
+                                <div class="filter-chips">
+                                    <button type="button" class="filter-chip" data-filter="status"
+                                        data-value="all">All</button>
+                                    <button type="button" class="filter-chip" data-filter="status"
+                                        data-value="overdue">Overdue</button>
+                                    <button type="button" class="filter-chip" data-filter="status"
+                                        data-value="expiring">Expiring</button>
+                                    <button type="button" class="filter-chip" data-filter="status"
+                                        data-value="ok">OK</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn-filter" id="btnToggleStatus">
+                        <span>🔧</span> Service
+                    </button>
+                    <button class="btn-filter" id="btnToggleActions">
+                        <span>👁️</span> Actions
+                    </button>
+                    <select class="filter-select" id="sortSelect">
+                        <option value="ins_asc">Insurance Expiry ↑</option>
+                        <option value="svc_asc">Service Due ↑</option>
+                        <option value="last_old">Last Service (Oldest)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Data Table -->
+            <div class="table-container">
+                <table class="data-table" id="customersTable">
+                    <thead>
+                        <tr>
+                            <th>Customer</th>
+                            <th>Vehicle</th>
+                            <th class="sortable" data-sort="last_old">Last Service <span class="sort-icon">↕</span></th>
+                            <th>Last KM</th>
+                            <th class="sortable" data-sort="svc_asc">Next Service <span class="sort-icon">↕</span></th>
+                            <th>Next KM</th>
+                            <th class="sortable" data-sort="ins_asc">Insurance <span class="sort-icon">↕</span></th>
+                            <th>WhatsApp</th>
+                            <th class="actions-col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTbody">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+
+                <div class="empty-state" id="emptyState" hidden>
+                    <div class="empty-state-icon">📂</div>
+                    <div class="empty-state-title">No customers found</div>
+                    <div class="empty-state-text">Try adjusting your search or add a new customer</div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- ==================== CUSTOMER DETAIL MODAL ==================== -->
+    <div class="modal-backdrop" id="detailBackdrop" hidden></div>
+    <div class="modal modal-lg" id="detailModal" hidden>
+        <div class="modal-header">
+            <div class="detail-header">
+                <div class="detail-customer">
+                    <div class="detail-avatar" id="detailAvatar">👤</div>
+                    <div>
+                        <div class="detail-name" id="detailName">Customer Name</div>
+                        <div class="detail-status" id="detailStatus"></div>
+                    </div>
+                </div>
+                <div class="detail-actions">
+                    <button class="btn-whatsapp" id="btnWhatsApp">
+                        <span>💬</span> WhatsApp
+                    </button>
+                    <a class="btn-call" id="btnCall" href="tel:">
+                        <span>📞</span> Call
+                    </a>
+                </div>
+            </div>
+            <button class="modal-close" id="btnCloseDetail">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="detail-info-grid">
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">📞</span>
+                    <div>
+                        <div class="detail-info-label">Mobile</div>
+                        <div class="detail-info-value" id="detailMobile">—</div>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">🚗</span>
+                    <div>
+                        <div class="detail-info-label">Vehicle</div>
+                        <div class="detail-info-value" id="detailVehicle">—</div>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">📍</span>
+                    <div>
+                        <div class="detail-info-label">Address</div>
+                        <div class="detail-info-value" id="detailAddress">—</div>
+                    </div>
+                </div>
+                <div class="detail-info-item">
+                    <span class="detail-info-icon">📋</span>
+                    <div>
+                        <div class="detail-info-label">Insurance Expires</div>
+                        <div class="detail-info-value" id="detailInsurance">—</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="prediction-cards">
+                <div class="prediction-card">
+                    <div class="prediction-card-header">
+                        <span>📅</span> Predicted Next Service
+                    </div>
+                    <div class="prediction-card-value" id="detailNextService">—</div>
+                </div>
+                <div class="prediction-card">
+                    <div class="prediction-card-header">
+                        <span>⏱️</span> Predicted Odometer
+                    </div>
+                    <div class="prediction-card-value" id="detailNextOdo">—</div>
+                </div>
+            </div>
+
+            <div class="service-history-section">
+                <div class="service-history-header">
+                    <div class="service-history-title">
+                        <span>📜</span> Service History
+                    </div>
+                    <button class="btn-add-service" id="btnAddService">
+                        <span>+</span> Add Service Entry
+                    </button>
+                </div>
+                <div id="serviceHistoryList">
+                    <!-- Service entries injected by JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ADD/EDIT CUSTOMER MODAL ==================== -->
+    <div class="modal-backdrop" id="customerBackdrop" hidden></div>
+    <div class="modal" id="customerModal" hidden>
+        <div class="modal-header">
+            <h2 id="customerModalTitle">Add Customer</h2>
+            <button class="modal-close" id="btnCloseCustomer">✕</button>
+        </div>
+        <form id="customerFormElement" class="modal-form">
+            <div class="modal-body">
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Customer Name</label>
+                        <input type="text" class="form-input form-input-simple" id="custName" placeholder="Enter name"
+                            required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mobile Number</label>
+                        <input type="tel" class="form-input form-input-simple" id="custMobile"
+                            placeholder="Enter mobile" required>
+                    </div>
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Vehicle Number</label>
+                        <input type="text" class="form-input form-input-simple" id="custVehicleNo"
+                            placeholder="Enter vehicle no." required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vehicle Model</label>
+                        <input type="text" class="form-input form-input-simple" id="custVehicleModel"
+                            placeholder="Enter model" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <input type="text" class="form-input form-input-simple" id="custAddress"
+                        placeholder="Enter address">
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Insurance Expiry Date</label>
+                        <input type="date" class="form-input form-input-simple" id="custInsurance">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Last Service Date</label>
+                        <input type="date" class="form-input form-input-simple" id="custLastService">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Odometer (KM)</label>
+                    <input type="number" class="form-input form-input-simple" id="custLastOdo" placeholder="Enter KM">
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Next Service Date <span
+                                style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+                        <input type="date" class="form-input form-input-simple" id="custNextService">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Next Service KM <span
+                                style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+                        <input type="number" class="form-input form-input-simple" id="custNextOdo"
+                            placeholder="Enter KM">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelCustomer">Cancel</button>
+                <button type="submit" class="btn-submit">Save Customer</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== ADD SERVICE MODAL ==================== -->
+    <div class="modal-backdrop" id="serviceBackdrop" hidden></div>
+    <div class="modal" id="serviceModal" hidden>
+        <div class="modal-header">
+            <h2>Add Service Entry</h2>
+            <button class="modal-close" id="btnCloseService">✕</button>
+        </div>
+        <form id="serviceFormElement" class="modal-form">
+            <div class="modal-body">
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label class="form-label">Service Date</label>
+                        <input type="date" class="form-input form-input-simple" id="svcDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Odometer (KM)</label>
+                        <input type="number" class="form-input form-input-simple" id="svcOdo" placeholder="Enter KM"
+                            required>
+                    </div>
+                </div>
+
+                <!-- Parts List Section -->
+                <div class="form-group">
+                    <label class="form-label">Parts & Services <span
+                            style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+                    <div id="partsContainer">
+                        <!-- Parts rows added dynamically -->
+                    </div>
+                    <button type="button" class="btn-add-part" id="btnAddPart">
+                        <span>+</span> Add Part/Service
+                    </button>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Work Summary</label>
+                    <textarea class="form-input form-input-simple" id="svcNotes"
+                        placeholder="Brief summary of work done..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Comments <span
+                            style="color: var(--text-muted); font-weight: 400;">(optional)</span></label>
+                    <textarea class="form-input form-input-simple" id="svcComments"
+                        placeholder="Any extra notes or reminders..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Total Cost (₹)</label>
+                    <input type="number" class="form-input form-input-simple" id="svcCost"
+                        placeholder="Auto-calculated or manual" required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" id="btnCancelService">Cancel</button>
+                <button type="submit" class="btn-submit">Save Entry</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ==================== LOADING OVERLAY ==================== -->
+    <div class="loading-overlay" id="loadingOverlay" hidden>
+        <div class="loading-spinner"></div>
+        <div class="loading-text" id="loadingText">Loading...</div>
+    </div>
+    <!-- ==================== WHATSAPP MESSAGE TYPE MODAL ==================== -->
+    <div class="modal-backdrop" id="whatsappBackdrop" hidden></div>
+    <div class="modal whatsapp-modal" id="whatsappModal" hidden>
+        <div class="modal-header whatsapp-header">
+            <h2>� Send Reminder via WhatsApp</h2>
+            <button class="modal-close" id="btnCloseWhatsapp">✕</button>
+        </div>
+        <div class="modal-body">
+            <div class="whatsapp-info">
+                <div class="whatsapp-customer-name" id="waCustomerName">Customer Name</div>
+                <div class="whatsapp-vehicle" id="waVehicle">Vehicle</div>
+                <div class="whatsapp-today">📅 Today: <span id="waTodayDate">-</span></div>
+            </div>
+
+            <div class="message-type-selector">
+                <p class="selector-label">Select Reminder Type:</p>
+                <div class="message-type-buttons">
+                    <button class="msg-type-btn insurance" id="btnMsgInsurance">
+                        <span class="msg-type-icon">📋</span>
+                        <span class="msg-type-text">Insurance Reminder</span>
+                        <span class="msg-type-date" id="waInsuranceDate">-</span>
+                    </button>
+                    <button class="msg-type-btn service" id="btnMsgService">
+                        <span class="msg-type-icon">🔧</span>
+                        <span class="msg-type-text">Service Reminder</span>
+                        <span class="msg-type-date" id="waServiceDate">-</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TOAST CONTAINER ==================== -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
