@@ -178,9 +178,11 @@ const dashboardPage = $("#dashboardPage");
 const loginForm = $("#loginForm");
 const signupForm = $("#signupForm");
 const forgotForm = $("#forgotForm");
+const resetForm = $("#resetForm");
 const loginFormElement = $("#loginFormElement");
 const signupFormElement = $("#signupFormElement");
 const forgotFormElement = $("#forgotFormElement");
+const resetFormElement = $("#resetFormElement");
 
 // Auth Buttons
 const btnGoSignup = $("#btnGoSignup");
@@ -380,6 +382,7 @@ function showAuth(screen = "login") {
     loginForm.hidden = screen !== "login";
     signupForm.hidden = screen !== "signup";
     forgotForm.hidden = screen !== "forgot";
+    resetForm.hidden = screen !== "reset";
 }
 
 function showDashboard() {
@@ -1285,6 +1288,12 @@ function wireEvents() {
     btnBackLogin1.addEventListener("click", e => { e.preventDefault(); showAuth("login"); });
     btnBackLogin2.addEventListener("click", e => { e.preventDefault(); showAuth("login"); });
 
+    // Back to login from reset form
+    const btnBackLogin3 = $("#btnBackLogin3");
+    if (btnBackLogin3) {
+        btnBackLogin3.addEventListener("click", e => { e.preventDefault(); showAuth("login"); });
+    }
+
     // Auth actions
     btnLogout.addEventListener("click", logout);
 
@@ -1378,7 +1387,83 @@ function wireEvents() {
     // Forgot form
     forgotFormElement.addEventListener("submit", async e => {
         e.preventDefault();
-        toast("warning", "Password Reset", "Configure Supabase credentials for password reset");
+
+        if (!state.supabase) {
+            toast("error", "Error", "Supabase not connected. Please add SUPABASE_URL and SUPABASE_ANON_KEY in script.js");
+            return;
+        }
+
+        const email = $("#forgotEmail").value.trim();
+
+        if (!email) {
+            toast("warning", "Missing Email", "Please enter your email address");
+            return;
+        }
+
+        setLoading(true, "Sending reset link...");
+
+        try {
+            const { error } = await state.supabase.auth.resetPasswordForEmail(email, {
+                redirectTo: window.location.origin + window.location.pathname
+            });
+
+            if (error) throw error;
+
+            toast("success", "Email Sent", "Check your email for the password reset link");
+            showAuth("login");
+        } catch (err) {
+            toast("error", "Reset Failed", err.message || "Could not send reset email");
+        } finally {
+            setLoading(false);
+        }
+    });
+
+    // Reset password form (set new password)
+    resetFormElement.addEventListener("submit", async e => {
+        e.preventDefault();
+
+        if (!state.supabase) {
+            toast("error", "Error", "Supabase not connected");
+            return;
+        }
+
+        const password = $("#resetPassword").value;
+        const confirmPassword = $("#resetPasswordConfirm").value;
+
+        if (!password || !confirmPassword) {
+            toast("warning", "Missing Fields", "Please fill all fields");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            toast("error", "Password Mismatch", "Passwords do not match");
+            return;
+        }
+
+        if (password.length < 6) {
+            toast("warning", "Weak Password", "Password must be at least 6 characters");
+            return;
+        }
+
+        setLoading(true, "Updating password...");
+
+        try {
+            const { error } = await state.supabase.auth.updateUser({ password });
+
+            if (error) throw error;
+
+            toast("success", "Password Updated", "Your password has been changed. Please sign in.");
+
+            // Sign out and go to login
+            await state.supabase.auth.signOut();
+            state.session = null;
+            state.user = null;
+            showAuth("login");
+        } catch (err) {
+            toast("error", "Update Failed", err.message || "Could not update password");
+        } finally {
+            setLoading(false);
+        }
     });
 
     // Dashboard
@@ -1596,9 +1681,52 @@ async function boot() {
 
     // Try to restore Supabase session if configured
     if (state.supabase) {
+        // Listen for auth state changes (including password recovery)
+        state.supabase.auth.onAuthStateChange(async (event, session) => {
+            if (event === "PASSWORD_RECOVERY") {
+                // User clicked password reset link - show reset form
+                state.session = session;
+                state.user = session?.user;
+                showAuth("reset");
+                toast("info", "Reset Password", "Please enter your new password");
+                return;
+            }
+        });
+
+        // Check for errors in URL (like expired reset links)
+        const hashParams = new URLSearchParams(window.location.hash.substring(1));
+        const error = hashParams.get('error');
+        const errorDescription = hashParams.get('error_description');
+
+        if (error) {
+            // Clear the hash from URL
+            window.history.replaceState(null, '', window.location.pathname);
+
+            if (error === 'access_denied' && errorDescription?.includes('expired')) {
+                toast("error", "Link Expired", "Password reset link has expired. Please request a new one.");
+                showAuth("forgot");
+            } else {
+                toast("error", "Error", errorDescription?.replace(/\+/g, ' ') || "Something went wrong. Please try again.");
+                showAuth("login");
+            }
+            return;
+        }
+
         try {
             const { data } = await state.supabase.auth.getSession();
             if (data?.session) {
+                // Check if this is a password recovery session by looking at URL hash
+                const type = hashParams.get('type');
+
+                if (type === 'recovery') {
+                    // This is a password recovery - show reset form
+                    state.session = data.session;
+                    state.user = data.session.user;
+                    showAuth("reset");
+                    toast("info", "Reset Password", "Please enter your new password");
+                    return;
+                }
+
                 state.session = data.session;
                 state.user = data.session.user;
 
