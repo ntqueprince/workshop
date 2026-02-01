@@ -147,6 +147,40 @@
                         Remember your password? <a href="#" id="btnBackLogin2">Sign in</a>
                     </p>
                 </div>
+
+                <!-- Reset Password Form (Set New Password) -->
+                <div id="resetForm" hidden>
+                    <div class="auth-form-header">
+                        <h1>Set new password</h1>
+                        <p>Enter your new password below</p>
+                    </div>
+
+                    <form id="resetFormElement">
+                        <div class="form-group">
+                            <label class="form-label">New Password</label>
+                            <div class="form-input-wrapper">
+                                <span class="form-input-icon">🔒</span>
+                                <input type="password" class="form-input" id="resetPassword" placeholder="••••••••"
+                                    required minlength="6">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Confirm Password</label>
+                            <div class="form-input-wrapper">
+                                <span class="form-input-icon">🔒</span>
+                                <input type="password" class="form-input" id="resetPasswordConfirm"
+                                    placeholder="••••••••" required minlength="6">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            Update Password →
+                        </button>
+                    </form>
+
+                    <p class="auth-footer">
+                        <a href="#" id="btnBackLogin3">Back to Sign in</a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
